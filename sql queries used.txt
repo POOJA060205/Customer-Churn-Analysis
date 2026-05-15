@@ -1,0 +1,166 @@
+
+ CUSTOMER CHURN ANALYSIS SQL QUERIES
+
+
+-- 1. View First 10 Records
+SELECT *
+FROM customer_churn_dataset
+LIMIT 10;
+
+
+-- 2. Total Number of Customers
+SELECT COUNT(*) AS total_customers
+FROM customer_churn_dataset;
+
+
+-- 3. Total Churned Customers
+SELECT COUNT(*) AS churned_customers
+FROM customer_churn_dataset
+WHERE churn = 'Yes';
+
+
+-- 4. Churn Distribution
+SELECT churn,
+       COUNT(*) AS customers
+FROM customer_churn_dataset
+GROUP BY churn;
+
+
+-- 5. Churn Rate Percentage
+SELECT 
+ROUND(
+    (SUM(CASE WHEN churn = 'Yes' THEN 1 ELSE 0 END) * 100.0)
+    / COUNT(*), 2
+) AS churn_rate
+FROM customer_churn_dataset;
+
+
+-- 6. Retention Rate Percentage
+SELECT 
+ROUND(
+    (SUM(CASE WHEN churn = 'No' THEN 1 ELSE 0 END) * 100.0)
+    / COUNT(*), 2
+) AS retention_rate
+FROM customer_churn_dataset;
+
+
+-- 7. Average Monthly Charges
+SELECT 
+ROUND(AVG(monthly_charges), 2) AS avg_monthly_charges
+FROM customer_churn_dataset;
+
+
+-- 8. Average Customer Age
+SELECT 
+ROUND(AVG(age), 2) AS avg_customer_age
+FROM customer_churn_dataset;
+
+
+-- 9. Average Customer Tenure
+SELECT 
+ROUND(AVG(tenure), 2) AS avg_tenure
+FROM customer_churn_dataset;
+
+
+-- 10. Churn Analysis by Gender
+SELECT gender,
+       churn,
+       COUNT(*) AS customers
+FROM customer_churn_dataset
+GROUP BY gender, churn;
+
+
+-- 11. Churn Analysis by Contract Type
+SELECT contract_type,
+       churn,
+       COUNT(*) AS customers
+FROM customer_churn_dataset
+GROUP BY contract_type, churn;
+
+
+-- 12. Churn Analysis by Payment Method
+SELECT payment_method,
+       churn,
+       COUNT(*) AS customers
+FROM customer_churn_dataset
+GROUP BY payment_method, churn;
+
+
+-- 13. Average Monthly Charges by Churn
+SELECT churn,
+       ROUND(AVG(monthly_charges), 2) AS avg_monthly_charges
+FROM customer_churn_dataset
+GROUP BY churn;
+
+
+-- 14. Average Tenure by Churn
+SELECT churn,
+       ROUND(AVG(tenure), 2) AS avg_tenure
+FROM customer_churn_dataset
+GROUP BY churn;
+
+
+-- 15. Age Group Analysis
+SELECT
+CASE
+    WHEN age BETWEEN 18 AND 24 THEN '18-24'
+    WHEN age BETWEEN 25 AND 40 THEN '25-40'
+    WHEN age BETWEEN 41 AND 60 THEN '41-60'
+    ELSE '60+'
+END AS age_group,
+churn,
+COUNT(*) AS customers
+FROM customer_churn_dataset
+GROUP BY age_group, churn;
+
+
+-- 16. Tenure Group Analysis
+SELECT
+CASE
+    WHEN tenure BETWEEN 0 AND 1 THEN '0-1 Year'
+    WHEN tenure BETWEEN 1 AND 3 THEN '1-3 Years'
+    WHEN tenure BETWEEN 3 AND 5 THEN '3-5 Years'
+    ELSE '5+ Years'
+END AS tenure_group,
+churn,
+COUNT(*) AS customers
+FROM customer_churn_dataset
+GROUP BY tenure_group, churn;
+
+
+-- 17. Customers with Highest Monthly Charges
+SELECT customer_id,
+       monthly_charges,
+       churn
+FROM customer_churn_dataset
+ORDER BY monthly_charges DESC
+LIMIT 10;
+
+
+-- 18. Customers with Longest Tenure
+SELECT customer_id,
+       tenure,
+       churn
+FROM customer_churn_dataset
+ORDER BY tenure DESC
+LIMIT 10;
+
+
+-- 19. Churn Percentage by Contract Type
+SELECT contract_type,
+ROUND(
+    (SUM(CASE WHEN churn = 'Yes' THEN 1 ELSE 0 END) * 100.0)
+    / COUNT(*), 2
+) AS churn_percentage
+FROM customer_churn_dataset
+GROUP BY contract_type;
+
+
+-- 20. Churn Percentage by Payment Method
+SELECT payment_method,
+ROUND(
+    (SUM(CASE WHEN churn = 'Yes' THEN 1 ELSE 0 END) * 100.0)
+    / COUNT(*), 2
+) AS churn_percentage
+FROM customer_churn_dataset
+GROUP BY payment_method;
